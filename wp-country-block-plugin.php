@@ -1,9 +1,8 @@
 <?php
-
 /*
 Plugin Name: Country Blocker
 Description: Block visitors from specific countries from accessing your website.
-Version: 1.0
+Version: 1.1
 Author: MD Arif Islam
 */
 
@@ -26,7 +25,7 @@ class Country_Blocker {
 	}
 
 	public function block_visitor() {
-		$allowed_countries = explode( ',', get_option( 'country_blocker_allowed_countries' ) );
+		$allowed_countries = get_option( 'country_blocker_allowed_countries' );
 		$visitor_country   = $this->get_visitor_country();
 
 		if ( ! in_array( $visitor_country, $allowed_countries ) ) {
@@ -75,12 +74,25 @@ class Country_Blocker {
 	}
 
 	public function allowed_countries_input() {
+		$countries = array(
+			'AF' => 'Afghanistan',
+			'AL' => 'Albania',
+			'BN' => 'Bangladesh',
+			// ...
+			'ZW' => 'Zimbabwe',
+		);
 		?>
-        <input type="text" name="country_blocker_allowed_countries"
-               value="<?php echo esc_attr( get_option( 'country_blocker_allowed_countries' ) ); ?>"
-               class="regular-text">
-        <p class="description">Enter a comma-separated list of country codes (e.g. US,GB ) to allow visitors from those
-            countries to access your website. Leave the field blank to allow visitors from all countries.
+        <select name="country_blocker_allowed_countries[]" multiple> <?php
+			$allowed_countries = get_option( 'country_blocker_allowed_countries' );
+			foreach ( $countries as $code => $name ) {
+				$selected = in_array( $code, (array) $allowed_countries ) ? 'selected' : '';
+				echo "<option value='{$code}' {$selected}>{$name}</option>";
+			}
+			?>
+        </select>
+        <p class="description">
+            Select one or more countries from the dropdown list and save changes to allow visitors from those countries
+            to access your website. Leave the list empty to allow visitors from all countries.
         </p>
 		<?php
 	}
