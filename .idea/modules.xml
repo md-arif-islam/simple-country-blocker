@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/wp-country-block-plugin.iml" filepath="$PROJECT_DIR$/.idea/wp-country-block-plugin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/wp-country-blocker.iml" filepath="$PROJECT_DIR$/.idea/wp-country-blocker.iml" />
     </modules>
   </component>
 </project>
