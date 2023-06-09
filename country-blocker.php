@@ -68,7 +68,9 @@ function country_blocker_restrict_countries() {
 
             // If the block page ID is not set or the block page content is empty,
             // display a default message
-            print `<div><h1>Access Restricted</h1><p>Access to this website is restricted from your country.</p></div>`
+            echo '<h1>Access Restricted</h1>';
+            echo '<p>Access to this website is restricted from your country.</p>';
+
             exit;
         }
     }
