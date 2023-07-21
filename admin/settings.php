@@ -4,8 +4,7 @@ if ( ! current_user_can( 'manage_options' ) ) {
 	wp_die( 'Access denied' );
 }
 
-$blocked_countries = (array) get_option( 'country_blocker_blocked_countries', array() );
-$block_page_id     = get_option( 'country_blocker_block_page_id', 0 );
+$blocked_countries = (array) get_option( 'simple_country_blocker_blocked_countries', array() );
 $page_options      = get_pages();
 
 // Country list array
@@ -268,8 +267,8 @@ $country_list = array(
     <h1>Country Blocker Settings</h1>
 
     <form method="post" action="options.php">
-		<?php settings_fields( 'country_blocker_settings_group' ); ?>
-		<?php do_settings_sections( 'country_blocker_settings_group' ); ?>
+		<?php settings_fields( 'simple_country_blocker_settings_group' ); ?>
+		<?php do_settings_sections( 'simple_country_blocker_settings_group' ); ?>
 
         <table class="form-table">
             <tr valign="top">
@@ -291,21 +290,6 @@ $country_list = array(
 						}
 					}
 					?>
-                </td>
-            </tr>
-            <tr valign="top">
-                <th scope="row">Access Restricted Page</th>
-                <td>
-                    <select name="country_blocker_block_page_id">
-                        <option value="0">None</option>
-						<?php
-						// Output the page options
-						foreach ( $page_options as $page ) {
-							$selected = $block_page_id == $page->ID ? 'selected' : '';
-							echo "<option value='$page->ID' $selected>$page->post_title</option>";
-						}
-						?>
-                    </select>
                 </td>
             </tr>
         </table>
