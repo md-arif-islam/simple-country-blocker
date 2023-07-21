@@ -1,9 +1,9 @@
 <?php
 /**
  * Plugin Name: Simple Country Blocker
- * Plugin URI: 
+ * Plugin URI:
  * Description: Restricts access to your website based on selected countries.
- * Version: 1.0.0
+ * Version: 1.0.1
  * Author: MD Arif Islam
  * Author URI: https://arifislam.techviewing.com
  * License: GPL v2 or later
@@ -11,7 +11,6 @@
  * Text Domain: simple_country_blocker
  * Domain Path: /languages
  */
-
 
 // Enqueue the admin scripts and styles
 function simple_country_blocker_enqueue_admin_scripts() {
@@ -55,7 +54,7 @@ function simple_country_blocker_restrict_countries() {
     $user_country = get_user_country();
 
     if ( isset( $blocked_countries, $user_country ) ) {
-        if ( ! empty( $blocked_countries ) && in_array( $user_country, $blocked_countries ) ) {
+        if ( !empty( $blocked_countries ) && in_array( $user_country, $blocked_countries ) ) {
             // Load the custom block page template
             status_header( 403 );
             nocache_headers();
@@ -75,3 +74,5 @@ function get_user_country() {
 
     return $country;
 }
+
+?>
