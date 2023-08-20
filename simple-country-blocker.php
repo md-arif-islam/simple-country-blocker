@@ -3,9 +3,9 @@
  * Plugin Name: Simple Country Blocker
  * Plugin URI:
  * Description: Restricts access to your website based on selected countries.
- * Version: 1.0.1
+ * Version: 1.0.2
  * Author: MD Arif Islam
- * Author URI: https://arifislam.techviewing.com
+ * Author URI: https://github.com/md-arif-islam
  * License: GPL v2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain: simple_country_blocker
@@ -19,9 +19,19 @@ function simple_country_blocker_enqueue_admin_scripts() {
 
 add_action( 'admin_enqueue_scripts', 'simple_country_blocker_enqueue_admin_scripts' );
 
-// Add the menu item and settings page
+// Add the top-level menu item before the "Settings" menu
 function simple_country_blocker_add_admin_menu() {
-    add_options_page( 'Simple Country Blocker Settings', 'Simple Country Blocker', 'manage_options', 'simple-country-blocker-settings', 'simple_country_blocker_render_settings' );
+    // Create a top-level menu item before the "Settings" menu
+    $position = 79; // Position before "Settings" which is 80
+    add_menu_page(
+        'Simple Country Blocker Settings', // Page title
+        'Simple Country Blocker', // Menu title
+        'manage_options', // Capability
+        'simple-country-blocker-settings', // Menu slug
+        'simple_country_blocker_render_settings', // Callback function
+        'dashicons-shield', // Icon URL (using a WordPress dashicon)
+        $position // Position
+    );
 }
 
 add_action( 'admin_menu', 'simple_country_blocker_add_admin_menu' );
