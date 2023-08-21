@@ -77,7 +77,7 @@ function simple_country_blocker_restrict_countries() {
         return; // Allow access to the WordPress dashboard
     }
 
-    $blocked_countries = get_option( 'country_blocker_blocked_countries', array() );
+    $blocked_countries = get_option( 'simple_country_blocker_blocked_countries', array() );
     $user_country = get_user_country();
 
     if ( isset( $blocked_countries, $user_country ) ) {
@@ -103,6 +103,11 @@ function get_user_country() {
         $ip_address = $_SERVER['HTTP_X_FORWARDED_FOR'];
     } else if ( isset( $_SERVER['REMOTE_ADDR'] ) ) {
         $ip_address = $_SERVER['REMOTE_ADDR'];
+    }
+
+    // If localhost, return a default country or handle it differently
+    if ( $ip_address == '127.0.0.1' || $ip_address == '::1' ) {
+        return 'BD'; // You can return any default country code or handle this case differently
     }
 
     $details = json_decode( file_get_contents( "http://ipinfo.io/{$ip_address}/json" ) );
