@@ -3,7 +3,7 @@
  * Plugin Name: Simple Country Blocker
  * Plugin URI:
  * Description: Restricts access to your website based on selected countries.
- * Version: 1.0.2
+ * Version: 1.0.3
  * Author: MD Arif Islam
  * Author URI: https://github.com/md-arif-islam
  * License: GPL v2 or later
@@ -12,19 +12,12 @@
  * Domain Path: /languages
  */
 
-// Enqueue the admin scripts and styles
-function simple_country_blocker_enqueue_admin_scripts() {
-    wp_enqueue_script( 'country-blocker-admin-script', plugins_url( '/assets/js/admin-script.js', __FILE__ ), array( 'jquery' ), '1.0.0', true );
-}
-
-add_action( 'admin_enqueue_scripts', 'simple_country_blocker_enqueue_admin_scripts' );
-
-// Add the top-level menu item before the "Settings" menu
+// Add the top-level menu and submenus
 function simple_country_blocker_add_admin_menu() {
     // Create a top-level menu item before the "Settings" menu
     $position = 79; // Position before "Settings" which is 80
     add_menu_page(
-        'Simple Country Blocker Settings', // Page title
+        'Simple Country Blocker', // Page title
         'Simple Country Blocker', // Menu title
         'manage_options', // Capability
         'simple-country-blocker-settings', // Menu slug
@@ -32,8 +25,27 @@ function simple_country_blocker_add_admin_menu() {
         'dashicons-shield', // Icon URL (using a WordPress dashicon)
         $position // Position
     );
-}
 
+    // Add the "Settings" submenu
+    add_submenu_page(
+        'simple-country-blocker-settings', // Parent slug
+        'Settings', // Page title
+        'Settings', // Menu title
+        'manage_options', // Capability
+        'simple-country-blocker-settings', // Menu slug
+        'simple_country_blocker_render_settings' // Callback function
+    );
+
+    // Add the "Test IP Address" submenu
+    add_submenu_page(
+        'simple-country-blocker-settings', // Parent slug
+        'Test IP Address', // Page title
+        'Test IP Address', // Menu title
+        'manage_options', // Capability
+        'simple-country-blocker-test-ip', // Menu slug
+        'simple_country_blocker_render_test_ip' // Callback function
+    );
+}
 add_action( 'admin_menu', 'simple_country_blocker_add_admin_menu' );
 
 // Register settings
@@ -46,6 +58,11 @@ add_action( 'admin_init', 'simple_country_blocker_register_settings' );
 // Render the settings page
 function simple_country_blocker_render_settings() {
     include_once plugin_dir_path( __FILE__ ) . 'admin/settings.php';
+}
+
+// Render the IP test page
+function simple_country_blocker_render_test_ip() {
+    include_once plugin_dir_path( __FILE__ ) . 'admin/ip-test.php';
 }
 
 // Restrict access to the website based on selected countries
@@ -78,7 +95,16 @@ add_action( 'template_redirect', 'simple_country_blocker_restrict_countries' );
 
 // Function to get the user's country code using ipinfo.io
 function get_user_country() {
-    $ip_address = $_SERVER['REMOTE_ADDR'];
+    $ip_address = null;
+
+    if ( isset( $_SERVER['HTTP_CLIENT_IP'] ) ) {
+        $ip_address = $_SERVER['HTTP_CLIENT_IP'];
+    } else if ( isset( $_SERVER['HTTP_X_FORWARDED_FOR'] ) ) {
+        $ip_address = $_SERVER['HTTP_X_FORWARDED_FOR'];
+    } else if ( isset( $_SERVER['REMOTE_ADDR'] ) ) {
+        $ip_address = $_SERVER['REMOTE_ADDR'];
+    }
+
     $details = json_decode( file_get_contents( "http://ipinfo.io/{$ip_address}/json" ) );
     $country = isset( $details->country ) ? $details->country : '';
 

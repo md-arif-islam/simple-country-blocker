@@ -284,7 +284,7 @@ $countries_counter = 0;
 
 foreach ( $country_list as $code => $name ) {
     $selected = in_array( $code, $blocked_countries ) ? 'checked' : '';
-    echo "<label><input type='checkbox' name='country_blocker_blocked_countries[]' value='$code' $selected> $name</label><br>";
+    echo "<label><input type='checkbox' name='simple_country_blocker_blocked_countries[]' value='$code' $selected> $name</label><br>";
 
     $countries_counter++;
     if ( $countries_counter % $countries_per_column == 0 ) {
